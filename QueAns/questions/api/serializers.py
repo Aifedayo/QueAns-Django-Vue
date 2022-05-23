@@ -3,9 +3,9 @@ from rest_framework import serializers
 from questions.models import Question, Answer
 
 class QuestionSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField(many=True)
+    author = serializers.StringRelatedField()
     created_at = serializers.SerializerMethodField()
-    slug = serializers.SlugField()
+    slug = serializers.SlugField(read_only=True)
     answers_count = serializers.SerializerMethodField()
     user_has_answered = serializers.SerializerMethodField()
 

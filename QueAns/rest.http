@@ -1,6 +1,6 @@
 @host=http://127.0.0.1:8000
-@username=new_user
-@email=new@user.com
+@username=tireduser
+@email=tireduser@user.com
 @password=testing123.
 @token=8e1a5247aeee27b80d99f2c1b51ca6cc51a1c329
 ### Create new account
@@ -25,6 +25,7 @@ Content-Type: application/json
     "password": "{{password}}"
 }
 
+{"auth_token":"41bc7b41337a2c58f3c2f3b3acbb184c5b0bee88"}
 
 ### Logout
 POST {{host}}/auth/token/logout/
