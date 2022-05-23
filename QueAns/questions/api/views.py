@@ -28,3 +28,10 @@ class AnswerCreateAPIView(generics.CreateAPIView):
         if question.answers.filter(author=request_user).exists():
             raise ValidationError("You have already answered this Question!")
         serializer.save(author=request_user, question=question)
+
+
+class AnswerRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    lookup_field = "uuid"
