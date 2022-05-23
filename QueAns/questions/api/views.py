@@ -39,7 +39,6 @@ class AnswerListAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         kwarg_slug = self.kwargs.get("slug")
-        print(f'kwarg_slug: {kwarg_slug}')
         return Answer.objects.filter(question__slug=kwarg_slug).order_by('-created_at')
 
 
