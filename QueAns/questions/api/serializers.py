@@ -5,7 +5,7 @@ from questions.models import Question, Answer
 class QuestionSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(many=True)
     created_at = serializers.SerializerMethodField()
-    slug = serializers.SlugRelatedField(read_only=True)
+    slug = serializers.SlugField()
     answers_count = serializers.SerializerMethodField()
     user_has_answered = serializers.SerializerMethodField()
 
