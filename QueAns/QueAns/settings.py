@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'rest_framework.authToken',
+    'rest_framework.authtoken',
 
     'django_registration',
     'djoser',
