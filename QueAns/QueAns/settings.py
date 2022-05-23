@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authToken',
 
+    'django_registration',
     'djoser',
     'widget_tweaks',
 
