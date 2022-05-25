@@ -13,11 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.contrib import admin
 from users.forms import CustomUserForm
 from django_registration.backends.one_step.views import RegistrationView
-
+from core.views import IndexTemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -33,4 +33,6 @@ urlpatterns = [
     path('auth/', include('djoser.urls.authtoken')),
 
     path('api/v1/', include('questions.api.urls')),
+
+    re_path(r"^.*$", IndexTemplateView.as_view(), name="spa-entry-point")
 ]
