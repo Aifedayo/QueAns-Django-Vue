@@ -9,8 +9,15 @@
     </button>
     <div class="collapse navbar-collapse ml-auto" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto">
+        <li class="nav-item me-2">
+          <router-link class="btn btn-danger" 
+            :to="{ name: 'question-editor' }"
+            >
+              Ask Question
+          </router-link>
+        </li>
         <li class="nav-item">
-          <a class="btn btn-outline-success" type="submit" href="/accounts/logout/">
+          <a class="btn btn-outline-success" href="/accounts/logout/">
             Logout
           </a>
         </li>
