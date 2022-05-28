@@ -44,7 +44,8 @@
             <AnswerComponent 
                 v-for="answer in answers"
                 :key="answer.uuid"
-                :answer="answer" 
+                :answer="answer"
+                :requestUser="requestUser"
             />
         </div>
         <div class="my-4">
@@ -59,7 +60,7 @@
 </template>
 
 <script>
-import { axios } from '@/common/api.service.js'
+import { axios } from '@/common/api.service.js';
 import AnswerComponent from '@/components/Answer.vue';
 import QuestionActions from '@/components/QuestionActions.vue';
 
