@@ -1,7 +1,21 @@
 <template>
-  <div class="home">
-    <h1>Homepage</h1>
-    <button @click="getQuestion">Load Questions</button>
+  <div class="home mt-2">
+    <div class="container">
+      <div v-for="question in questions"
+              :key="question.pk"
+      >
+        <div class="card shadow p-2 mb-4 bg-body rounded">
+          <div class="card-body">
+            <p class="mb-0"> 
+              Posted by: <span class="question-author">
+                {{ question.author }}</span>
+            </p>
+            <h4>{{ question.content }}</h4>
+            <p class="mb-0">Answers: {{ question.answers_count }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -17,12 +31,16 @@ export default {
     }
   },
 
+  created() {
+    this.getQuestion();
+  },
+
   methods: {
     async getQuestion() {
       let endpoint = '/api/v1/questions/';
       try {
         const response = await axios.get(endpoint);
-        console.log(response)
+        this.questions = (response.data);
       } catch (error) {
         console.error(error.response);
         alert(error.response.statusText);
@@ -31,3 +49,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+  .question-author {
+    font-weight: bold;
+    color: rgb(244, 103, 103);
+  }
+
+</style>
