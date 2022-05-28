@@ -7,6 +7,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     created_at = serializers.SerializerMethodField()
     slug = serializers.SlugField(read_only=True)
     answers_count = serializers.SerializerMethodField()
+    content = serializers.SerializerMethodField()
     user_has_answered = serializers.SerializerMethodField()
 
     class Meta:
@@ -22,6 +23,9 @@ class QuestionSerializer(serializers.ModelSerializer):
     def get_user_has_answered(self, instance):
         request = self.context.get("request")
         return instance.answers.filter(author=request.user).exists()
+
+    def get_content(self, instance):
+        return instance.content.title()
 
 
 class AnswerSerializer(serializers.ModelSerializer):
