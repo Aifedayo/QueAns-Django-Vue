@@ -8,6 +8,7 @@ from django.db import models
 
 
 class Question(TimeStampedModel):
+    uuid = models.UUIDField(default=uuid_lib.uuid4, editable=False)
     content = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True)
     author = models.ForeignKey(
