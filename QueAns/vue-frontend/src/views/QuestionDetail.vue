@@ -1,19 +1,61 @@
 <template>
-    <div v-if="question" class="container">
-      <h1>{{ question.content }}</h1>
-      <p class="mb-0">
-        Posted by:
-        <span class="author-name">{{ question.author }}</span>
-      </p>
-      <p>{{ question.created_at }}</p>
-    </div>
-    <div v-else>
-        <h1 class="error text-center">404 - Question Not Found</h1>
+    <div class="container mt-3">
+        <div v-if="question" class="container">
+        <h1>{{ question.content }}</h1>
+        <p class="mb-0">
+            Posted by:
+            <span class="author-name">{{ question.author }}</span>
+        </p>
+        <p>{{ question.created_at }}</p>
+
+        <div v-if="userHasAnswered">
+            <p class="answer-added">You've written an answer!</p>
+        </div>
+        <div v-else-if="showForm">
+            <form @submit.prevent="onSubmit">
+                <p>Answer the Question</p>
+                <textarea 
+                    v-model="newAnswerBody"
+                    class="form-control" placeholder="Share your knowledge" 
+                    rows="10"
+                >
+                </textarea>
+                <button class="btn btn-outline-success my-3" @click="showForm=true">
+                    Send your Answer
+                </button>
+            </form>
+            <p v-if="error" class="error mt-2">{{ error }}</p>
+        </div>
+        <div v-else>
+            <button class="btn btn-outline-danger" @click="showForm=true">
+                Answer the Question
+            </button>
+        </div>
+        </div>
+        <div v-else>
+            <h1 class="error text-center">404 - Question Not Found</h1>
+        </div>
+        <div v-if="question" class="container">
+            <AnswerComponent 
+                v-for="answer in answers"
+                :key="answer.uuid"
+                :answer="answer" 
+            />
+        </div>
+        <div class="my-4">
+            <p v-show="loadingAnswers">...loading...</p>
+            <button v-show="next" @click="getQuestionAnswers"
+                class="btn btn-sm btn-outline-danger"
+            >
+            Load more answers
+                </button>
+            </div>
     </div>
 </template>
 
 <script>
 import { axios } from '@/common/api.service.js'
+import AnswerComponent from '@/components/Answer.vue';
 
 export default {
     name: "QuestionDetail",
@@ -25,9 +67,20 @@ export default {
         }
     },
 
+    components: {
+    AnswerComponent,
+  },
+
     data() {
         return {
             question: null,
+            answers: [],
+            next: null,
+            loadingAnswers: false,
+            userHasAnswered: false,
+            showForm: false,
+            newAnswerBody: null,
+            error: null,
         }
     },
 
@@ -41,15 +94,55 @@ export default {
             try {
                 const response = await axios.get(endpoint);
                 this.question = response.data;
-
+                this.userHasAnswered = response.data.user_has_answered;
+                this.setPageTitle(response.data.content);
             } catch(error) {
                 console.error(error.response);
+                const title = '404 - Not Found!';
+                this.setPageTitle(title);
+            }
+        },
+
+        async getQuestionAnswers() {
+            let endpoint = `/api/v1/questions/${this.slug}/answers`;
+            if (this.next) {
+                endpoint = this.next;
+            }
+            this.loadingAnswers = true;
+            try {
+                const response = await axios.get(endpoint);
+                this.answers.push(...response.data.results);
+                this.loadingAnswers = false;
+                if (response.data.next) {
+                this.next = response.data.next;
+                } else {
+                this.next = null;
+                }
+            } catch (error) {
+                console.log(error.response);
+                alert(error.response.statusText);
+            }
+        },
+
+        async onSubmit() {
+            if (!this.newAnswerBody){
+                this.error = "You can't send an empty answer!"
+                return
+            }
+            const endpoint = `/api/v1/questions/${this.slug}/answer/`;
+            try {
+
+            } catch (error) {
+                console.error(error.response);
+                alert(error.response.statusText);
             }
         }
     },
 
     created() {
-        this.getQuestionDetail()
+        document.title = "QueAns";
+        this.getQuestionDetail();
+        this.getQuestionAnswers();
     }
 }
 </script>
@@ -58,5 +151,9 @@ export default {
     .author-name {
         font-weight: bold;
           color: #dc3545; 
+    }
+
+    .answer-added {
+        color: green;
     }
 </style>
