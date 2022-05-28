@@ -129,9 +129,18 @@ export default {
                 this.error = "You can't send an empty answer!"
                 return
             }
-            const endpoint = `/api/v1/questions/${this.slug}/answer/`;
+            const endpoint = `/api/v1/questions/${this.slug}/answer`;
             try {
-
+                const response = await axios.post(endpoint, {
+                    body: this.newAnswerBody,
+                });
+                this.answers.unshift(response.data);
+                this.newAnswerBody = null;
+                this.showForm = false;
+                this.userHasAnswered = true;
+                if (this.error) {
+                    this.error = null;
+                }
             } catch (error) {
                 console.error(error.response);
                 alert(error.response.statusText);
