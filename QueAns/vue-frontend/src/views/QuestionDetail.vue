@@ -81,10 +81,21 @@ export default {
             showForm: false,
             newAnswerBody: null,
             error: null,
+            requestUser: null,
+        }
+    },
+
+    computed: {
+        isQuestionAuthor() {
+            return this.question.author == this.requestUser;
         }
     },
 
     methods: {
+        setRequestUser() {
+            this.requestUser = window.localStorage.getItem("username");
+        },
+
         setPageTitle(title) {
             document.title = title;
         },
@@ -152,6 +163,7 @@ export default {
         document.title = "QueAns";
         this.getQuestionDetail();
         this.getQuestionAnswers();
+        this.setRequestUser();
     }
 }
 </script>

@@ -6,11 +6,29 @@
 </template>
 
 <script>
+import { axios } from '@/common/api.service.js';
 import NavbarComponent from '@/components/Navbar.vue';
 export default {
   name: "App",
   components: {
-    NavbarComponent
+    NavbarComponent,
+  },
+
+  methods: {
+    async setUserInfo() {
+      try {
+        const response = axios.get("/auth/users/me");
+        const requestUser = response.data['username']
+        window.localStorage.setItem("username", requestUser);
+      } catch (error) {
+        console.error(error.response);
+        alert(error.response.statusText);
+      }
+    },
+  },
+
+  created() {
+    this.setUserInfo();
   }
 }
 </script>
