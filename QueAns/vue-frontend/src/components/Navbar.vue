@@ -13,11 +13,11 @@
           <router-link class="btn btn-danger" 
             :to="{ name: 'question-editor' }"
             >
-              Ask Question
+              Ask Question {{ requestUser }}
           </router-link>
         </li>
         <li class="nav-item">
-          <a class="btn btn-outline-success" href="/accounts/logout/">
+          <a class="btn btn-outline-dark" href="/accounts/logout/">
             Logout
           </a>
         </li>
@@ -30,6 +30,22 @@
 <script>
 export default {
   name: "NavbarComponent",
+
+  data() {
+    return {
+      requestUser: null,
+    }
+  },
+
+  created() {
+    this.setRequestUser();
+  },
+
+  methods: {
+    setRequestUser() {
+      this.requestUser = window.localStorage.getItem("username");
+    },
+  }
 };
 </script>
 

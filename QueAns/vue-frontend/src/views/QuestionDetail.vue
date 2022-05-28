@@ -8,6 +8,11 @@
         </p>
         <p>{{ question.created_at }}</p>
 
+        <QuestionActions 
+            v-if="isQuestionAuthor"
+            :slug="question.slug"
+        />
+
         <div v-if="userHasAnswered">
             <p class="answer-added">You've written an answer!</p>
         </div>
@@ -56,6 +61,7 @@
 <script>
 import { axios } from '@/common/api.service.js'
 import AnswerComponent from '@/components/Answer.vue';
+import QuestionActions from '@/components/QuestionActions.vue';
 
 export default {
     name: "QuestionDetail",
@@ -69,6 +75,7 @@ export default {
 
     components: {
     AnswerComponent,
+    QuestionActions,
   },
 
     data() {
