@@ -15,6 +15,14 @@
           </div>
         </div>
       </div>
+
+      <div class="my-4">
+        <button v-show="next" @click="getQuestions"
+              class="btn btn-sm btn-outline-danger"
+        >
+          Load more questions
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -27,20 +35,30 @@ export default {
 
   data() {
     return {
-      questions: []
+      questions: [],
+      next: null,
     }
   },
 
   created() {
-    this.getQuestion();
+    this.getQuestions();
   },
 
   methods: {
-    async getQuestion() {
+    async getQuestions() {
       let endpoint = '/api/v1/questions/';
+      if (this.next) {
+        endpoint = this.next;
+      }
       try {
         const response = await axios.get(endpoint);
-        this.questions = (response.data.results);
+        this.questions.push(...response.data.results);
+        
+        if (response.data.next){
+          this.next = response.data.next;
+        } else {
+          this.next = null;
+        }
       } catch (error) {
         console.error(error.response);
         alert(error.response.statusText);
