@@ -1,12 +1,20 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light my-navbar">
+  <div class="container">
+    <router-link class="navbar-brand" :to="{name: 'home'}">
+      QueAns
+    </router-link>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse ml-auto" id="navbarSupportedContent">
-      <button class="btn btn-outline-success" type="submit">Search</button>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="btn btn-outline-success" type="submit" href="/accounts/logout/">
+            Logout
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>
