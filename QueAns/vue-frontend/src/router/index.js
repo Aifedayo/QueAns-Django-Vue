@@ -7,6 +7,12 @@ const routes = [
     name: 'home',
     component: HomeView
   },
+  {
+    path: '/category/:slug/questions/',
+    name: 'question-list',
+    component: () => import(/* webpackChunkName: "question" */ '../views/QuestionView.vue'),
+  props: true,
+  },
    {
      path: '/question/:slug/',
      name: 'question',
