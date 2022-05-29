@@ -46,6 +46,7 @@
                 :key="answer.uuid"
                 :answer="answer"
                 :requestUser="requestUser"
+                @delete-answer="deletAnswer"
             />
         </div>
         <div class="my-4">
@@ -163,6 +164,17 @@ export default {
             } catch (error) {
                 console.error(error.response);
                 alert(error.response.statusText);
+            }
+        },
+
+        async deletAnswer(answer) {
+            const endpoint = `/api/v1/answers/${answer.uuid}/`;
+            try {
+                await axios.delete(endpoint);
+                this.answers.splice(this.answers.indexOf(answer), 1);
+                this.userHasAnswered = false;
+            } catch (error) {
+                console.error(error);
             }
         }
     },

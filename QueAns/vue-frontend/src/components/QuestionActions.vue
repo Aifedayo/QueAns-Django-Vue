@@ -1,12 +1,12 @@
 <template>
     <div class="container mt-3">
         <router-link 
-            class="btn btn-sm btn-warning mx-3"
+            class="btn btn-sm btn-warning"
             :to="{ name: 'question-editor', params: {slug: slug}}"
         >
             Edit
         </router-link>
-        <button class="btn btn-sm btn-danger" @click="showDeleteModal = !showDeleteModal">Delete</button>
+        <button class="btn btn-sm btn-danger mx-3" @click="showDeleteModal = !showDeleteModal">Delete</button>
         
         <button v-show="showDeleteModal" 
             class="btn btn-sm btn-outline-danger"

@@ -11,12 +11,30 @@
             >
                 Edit
             </router-link>
+            <button class="btn btn-sm btn-danger mx-3" @click="showDeleteModal = !showDeleteModal">
+                Delete
+            </button>
+            <button v-show="showDeleteModal" 
+                class="btn btn-sm btn-outline-danger"
+                @click="triggerDeleteAnswer"    
+            >
+                `Yes, delete the Answer
+        </button>
+        </div>
+        <div v-else>
+            <button
+                class="btn btn-sm btn-warning"
+                @click="toggleLike"
+            >
+                Like Answer ({{ likesCounter }})
+            </button>
         </div>
         <hr>
     </div>
 </template>
 
 <script>
+import { axios } from '@/common/api.service.js';
 export default {
     name: "AnswerComponent",
     props: {
@@ -30,10 +48,50 @@ export default {
         }
     },
 
+    data() {
+        return {
+            showDeleteModal: false,
+            userLikedAnswer: this.answer.user_has_liked_answer,
+            likesCounter: this.answer.likes_count,
+        }
+    },
+
     computed: {
         isAnswerAuthor() {
             return this.answer.author === this.requestUser;
         }
+    },
+
+    methods: {
+        toggleLike() {
+            this.userLikedAnswer === false ? this.likeAnswer() : this.unLikeAnswer();
+        },
+
+        async likeAnswer() {
+            this.userLikedAnswer = true;
+            this.likesCounter += 1;
+            const endpoint = `/api/v1/answers/${this.answer.uuid}/like/`;
+            try {
+                await axios.post(endpoint);
+            } catch (error) {
+                console.error(error.response);
+            }
+        },
+
+        async unLikeAnswer() {
+            this.userLikedAnswer = false;
+            this.likesCounter -= 1;
+            const endpoint = `/api/v1/answers/${this.answer.uuid}/like/`;
+            try {
+                await axios.delete(endpoint);
+            } catch (error) {
+                console.error(error.response);
+            }
+        },
+
+        triggerDeleteAnswer() {
+            this.$emit("delete-answer", this.answer);
+        },
     }
 }
 </script>
