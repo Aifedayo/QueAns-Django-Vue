@@ -12,6 +12,10 @@ export default {
         return {
             message: "404 - Not Found!"
         }
+    },
+
+    created() {
+        document.title = this.message;
     }
 }
 </script>

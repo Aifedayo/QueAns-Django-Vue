@@ -27,6 +27,11 @@ const routes = [
   name: 'answer-editor',
   component: () => import(/* webpackChunkName: "answer-editor" */ '../views/AnswerEditor.vue'),
   props: true,
+},
+{
+  path: '/:catchAll(.*)',
+  name: 'page-not-found',
+  component: () => import(/* webpackChunkName: "page-not-found" */ '../views/NotFound.vue'),
 }
 ]
 
