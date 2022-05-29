@@ -18,7 +18,7 @@
                 class="btn btn-sm btn-outline-danger"
                 @click="triggerDeleteAnswer"    
             >
-                `Yes, delete the Answer
+                Yes, delete the Answer
         </button>
         </div>
         <div v-else>

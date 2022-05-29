@@ -5,25 +5,32 @@ from questions.models import Category, Question, Answer
 class CategorySerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()
     slug = serializers.SlugField(read_only=True)
+    count = serializers.SerializerMethodField()
     class Meta:
         model = Category
         fields = '__all__'
 
+    def get_count(self, instance):
+        return instance.questions.count()
 
 class QuestionSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField()
     author = serializers.StringRelatedField()
     created_at = serializers.SerializerMethodField()
+    updated_at = serializers.SerializerMethodField()
     slug = serializers.SlugField(read_only=True)
     answers_count = serializers.SerializerMethodField()
     user_has_answered = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
-        exclude = ['id', 'updated_at']
+        exclude = ['id']
 
     def get_created_at(self, instance):
         return instance.created_at.strftime("%B %d, %Y")
+
+    def get_updated_at(self, instance):
+        return instance.updated_at.strftime("%B %d, %Y")
 
     def get_answers_count(self, instance):
         return instance.answers.count()

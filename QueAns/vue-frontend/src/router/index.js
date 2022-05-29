@@ -23,7 +23,12 @@ const routes = [
   props: true,
   },
   {
-    path: '/ask/:slug?',
+    path: '/add/',
+    name: 'category-editor',
+    component: () => import(/* webpackChunkName: "questioneditor" */ '../views/CategoryEditor.vue'),
+ },
+  {
+    path: '/ask/',
     name: 'question-editor',
     component: () => import(/* webpackChunkName: "questioneditor" */ '../views/QuestionEditor.vue'),
     props: true,

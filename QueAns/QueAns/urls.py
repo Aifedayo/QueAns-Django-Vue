@@ -13,11 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.urls import path, include, re_path
-from django.contrib import admin
-from users.forms import CustomUserForm
-from django_registration.backends.one_step.views import RegistrationView
 from core.views import IndexTemplateView
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path, re_path
+from django_registration.backends.one_step.views import RegistrationView
+from users.forms import CustomUserForm
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -34,5 +37,9 @@ urlpatterns = [
 
     path('api/v1/', include('questions.api.urls')),
 
-    re_path(r"^.*$", IndexTemplateView.as_view(), name="spa-entry-point")
+    re_path(r"^(?!media).*$", IndexTemplateView.as_view(), name="spa-entry-point")
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, 
+                                document_root=settings.MEDIA_ROOT)

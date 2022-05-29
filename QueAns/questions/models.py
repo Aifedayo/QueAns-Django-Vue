@@ -8,6 +8,8 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=200, db_index=True)
     slug = models.SlugField(max_length=200, unique=True)
+    context = models.TextField()
+    avatar = models.ImageField(null=True, blank=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, 
                                     related_name='categories')
@@ -25,14 +27,16 @@ class Question(TimeStampedModel):
     category = models.ForeignKey(Category, related_name='questions',
                                          on_delete=models.CASCADE)
     uuid = models.UUIDField(default=uuid_lib.uuid4, editable=False)
-    content = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
+    avatar = models.ImageField(null=True, blank=True)
+    content = models.TextField()
     slug = models.SlugField(max_length=255, unique=True)
     author = models.ForeignKey(
                             settings.AUTH_USER_MODEL, on_delete=models.CASCADE, 
                             related_name='questions')
 
     def __str__(self):
-        return self.content
+        return self.title
 
 
 class Answer(TimeStampedModel):

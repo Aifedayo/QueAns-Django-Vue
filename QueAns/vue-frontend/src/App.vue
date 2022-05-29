@@ -37,5 +37,7 @@ export default {
   body {
         font-family: "Noto Sans JP", sans-serif;
         font-weight: 400;
+        background: linear-gradient(to bottom right, #f9f7f9, #f4f4f4);;
       }
+      
 </style>

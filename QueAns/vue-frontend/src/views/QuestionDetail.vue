@@ -1,7 +1,9 @@
 <template>
     <div class="container mt-3">
         <div v-if="question" class="container">
-        <h1>{{ question.content }}</h1>
+        <h1>{{ question.title }}</h1>
+
+        <p> {{ question.content }}</p>
         <p class="mb-0">
             Posted by:
             <span class="author-name">{{ question.author }}</span>
@@ -89,6 +91,7 @@ export default {
             userHasAnswered: false,
             showForm: false,
             newAnswerBody: null,
+            newQuestionTitle: null,
             error: null,
             requestUser: null,
         }
@@ -124,7 +127,7 @@ export default {
         },
 
         async getQuestionAnswers() {
-            let endpoint = `/api/v1/questions/${this.slug}/answers`;
+            let endpoint = `/api/v1/questions/${this.slug}/answers/`;
             if (this.next) {
                 endpoint = this.next;
             }
@@ -149,7 +152,7 @@ export default {
                 this.error = "You can't send an empty answer!"
                 return
             }
-            const endpoint = `/api/v1/questions/${this.slug}/answer`;
+            const endpoint = `/api/v1/questions/${this.slug}/answer/`;
             try {
                 const response = await axios.post(endpoint, {
                     body: this.newAnswerBody,
