@@ -5,25 +5,42 @@ from django.conf import settings
 from django.db import models
 
 # Create your models here.
+class Category(models.Model):
+    name = models.CharField(max_length=200, db_index=True)
+    slug = models.SlugField(max_length=200, unique=True)
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
+
+    def __str__(self):
+        return self.name
 
 
 class Question(TimeStampedModel):
+    category = models.ForeignKey(Category, related_name='questions',
+                                         on_delete=models.CASCADE)
     uuid = models.UUIDField(default=uuid_lib.uuid4, editable=False)
     content = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True)
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='questions')
+                            settings.AUTH_USER_MODEL, on_delete=models.CASCADE, 
+                            related_name='questions')
 
     def __str__(self):
         return self.content
 
 
 class Answer(TimeStampedModel):
-    uuid = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
+    uuid = models.UUIDField(db_index=True, default=uuid_lib.uuid4, 
+                                editable=False)
     body = models.TextField()
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="answers")
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, 
+                                    related_name="answers")
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='answers')
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, 
+                                    related_name='answers')
     voters = models.ManyToManyField(
                     settings.AUTH_USER_MODEL, related_name='likes')
 
