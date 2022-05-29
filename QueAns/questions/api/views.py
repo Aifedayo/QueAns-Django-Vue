@@ -1,6 +1,7 @@
 from questions.api.permissions import IsAuthorOrReadOnly
-from questions.api.serializers import AnswerSerializer, QuestionSerializer
-from questions.models import Answer, Question
+from questions.api.serializers import (AnswerSerializer, CategorySerializer, 
+                                        QuestionSerializer)
+from questions.models import Answer, Category, Question
 from rest_framework import generics, viewsets, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
@@ -9,14 +10,42 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
-class QuestionViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all().order_by('-id')
+    serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+
+    def perform_create(self, serializer):
+        request_user = self.request.user
+        serializer.save(author=request_user)
+
+class QuestionCreateAPIView(generics.CreateAPIView):
     queryset = Question.objects.all().order_by('-created_at')
     serializer_class = QuestionSerializer
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    permission_classes = [IsAuthenticated]
     lookup_field = "slug"
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        request_user = self.request.user
+        kwarg_slug = self.kwargs.get('slug')
+        category = get_object_or_404(Category, slug=kwarg_slug)
+        serializer.save(author=request_user, category=category)
+
+
+class QuestionListAPIView(generics.ListAPIView):
+    serializer_class = QuestionSerializer
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+
+    def get_queryset(self):
+        kwarg_slug = self.kwargs.get("slug")
+        return Question.objects.filter(category__slug=kwarg_slug) 
+
+
+class QuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    lookup_field = "slug"
 
 # /question/slug/answer
 class AnswerCreateAPIView(generics.CreateAPIView):

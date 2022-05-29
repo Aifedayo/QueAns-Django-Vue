@@ -3,11 +3,19 @@ from django.dispatch import receiver
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
 
-from questions.models import Question
+from questions.models import Question, Category
 
 @receiver(pre_save, sender=Question)
 def add_slug_to_question(sender, instance, *args, **kwargs):
     if instance and not instance.slug:
         slug = slugify(instance.content)
         random_string = get_random_string(length=8)
+        instance.slug = slug + '-' + random_string
+
+
+@receiver(pre_save, sender=Category)
+def add_slug_to_category(sender, instance, *args, **kwargs):
+    if instance and not instance.slug:
+        slug = slugify(instance.name)
+        random_string = get_random_string(length=3)
         instance.slug = slug + '-' + random_string

@@ -1,8 +1,17 @@
 from rest_framework import serializers
 
-from questions.models import Question, Answer
+from questions.models import Category, Question, Answer
+
+class CategorySerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField()
+    slug = serializers.SlugField(read_only=True)
+    class Meta:
+        model = Category
+        fields = '__all__'
+
 
 class QuestionSerializer(serializers.ModelSerializer):
+    category = serializers.StringRelatedField()
     author = serializers.StringRelatedField()
     created_at = serializers.SerializerMethodField()
     slug = serializers.SlugField(read_only=True)
