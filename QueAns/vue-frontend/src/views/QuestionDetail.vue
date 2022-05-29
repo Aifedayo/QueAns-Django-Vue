@@ -110,7 +110,7 @@ export default {
         },
 
         async getQuestionDetail() {
-            const endpoint = `/api/v1/questions/${this.slug}/`;
+            const endpoint = `/api/v1/question/${this.slug}/`;
             try {
                 const response = await axios.get(endpoint);
                 this.question = response.data;

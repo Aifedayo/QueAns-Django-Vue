@@ -1,16 +1,19 @@
 <template>
-  <div class="home mt-2">
+  <div class="home mt-5">
     <div class="container">
       <div v-for="category in categories"
               :key="category.pk"
       >
         <div class="card shadow p-2 mb-4 bg-body rounded">
           <div class="card-body">
-            
+            <router-link :to="{ name: 'question-list', params: {slug: category.slug} }"
+              class="question-link"
+            >
               <p class="mb-0"> 
                 <span class="question-author">
                 {{ category.name }}</span>
-            </p>
+              </p>
+            </router-link>
           </div>
         </div>
       </div>

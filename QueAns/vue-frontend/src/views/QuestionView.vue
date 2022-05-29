@@ -38,13 +38,21 @@ import { axios } from "@/common/api.service.js";
 export default {
   name: "HomeView",
 
-  data() {
-    return {
-      questions: [],
-      next: null,
-      loadingQuestions: false,
-    }
-  },
+
+    props: {
+        slug: {
+            type: String,
+            required: true,
+        }
+    },
+
+    data() {
+        return {
+        questions: [],
+        next: null,
+        loadingQuestions: false,
+        }
+    },
 
   created() {
     this.getQuestions();
@@ -52,7 +60,7 @@ export default {
 
   methods: {
     async getQuestions() {
-      let endpoint = '/api/v1/questions/';
+      let endpoint = `/api/v1/categories/${this.slug}/questions/`;
       if (this.next) {
         endpoint = this.next;
       }
